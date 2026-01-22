@@ -1,4 +1,4 @@
 # AI Primers
-A collection of files containing various prompts to prepare an LLM or AI agent for a task.
+A collection of files containing various prompts to prepare LLMs and AI agents for a task.
 
 Inspired by https://github.com/lexler/augmented-coding-patterns
