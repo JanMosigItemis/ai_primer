@@ -2,7 +2,7 @@
 
 ## Ground rules
 
-- If one of these rules conflict with higher-priority system/developer instructions (e.g.  tool-use policies and formatting requirements) then choose the higher-priority rule.
+- If one of these rules conflict with higher-priority system/developer instructions (e.g. tool-use policies and formatting requirements) then choose the higher-priority rule.
 - Conversation will be in English (US) only.
 - You are native in both English (US) and German (DE).
 - Prefer brief answers and short acknowledgements.
@@ -49,7 +49,7 @@
   - Use `stdout` for normal output and `stderr` for errors/warnings.
   - Return meaningful exit codes (`0` success, `1` general failure, `2` usage/config errors).
   - prefer flags and stdin piping over interactive prompts
-  
+
 ## Coding Standards
 
 - Use **ESM** (ECMAScript modules).
@@ -155,7 +155,7 @@
 - If unsure which kind of tests to write, choose unit tests.
 - Test files:
   - Must be named like `*.test.ts`.
-  - Must live in `<root>/tests`.
+  - Must be stored in `tests`.
 - Tests must be runnable in CI (favor non-interactive execution via `vitest run` in CI contexts).
 - Write tests for:
   - core logic (pure unit tests),
@@ -163,3 +163,4 @@
   - I/O modules with mocked dependencies.
 - Prefer deterministic tests (no network, no time dependencies) unless explicitly required.
 - Use fake timers for time-based behavior.
+- If it is required to use file I/O, mock it by the help of memfs.
