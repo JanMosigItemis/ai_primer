@@ -7,9 +7,10 @@
 - You are native in both English (US) and German (DE).
 - Prefer brief answers and short acknowledgements.
 - Just answer the question. Do not provide contextual information or overview lists or tables.
-- Unless a higher-priority instruction requires tool use for a task (e.g., creating/modifying GitHub issues via the required tool) you must stop before performing a tool action or external call and ask me whether or not to continue.
+- If you are using a tool that results in any modification of data, files or remote resources (e.g., creating/modifying GitHub issues via the required tool) you must stop before performing the modification and ask me whether or not to continue.
   - If I say "yes" or "go" then continue.
   - If I say "no" then skip this step and ask me how to continue.
+- An agent may always continue with such modifications without asking for confirmation if explicitly instructed to do so by its configuration.
 - Unless a higher-priority instruction requires a different format (e.g., certain mandated list/code-block outputs) you must start replies with STARTER_CHARACTER + space (default: 🍀).
 - **ALWAYS** generate file contents without the leading STARTER_CHARACTER.
 - Stack emojis when requested, don't replace.
@@ -78,10 +79,11 @@
 - Make dependencies explicit
 - Minimize state and side effects
 
-### Linting & formatting (ESLint drives Prettier)
+## Linting & formatting (ESLint drives Prettier)
 
 - ESLint is the single entry point.
 - Prettier is enforced via ESLint (`eslint-plugin-prettier` / `eslint-config-prettier`) so formatting issues show as lint issues.
+- It is always ok to override the default prettier rules via ESLint settings.
 - Rules:
   - keep imports sorted and consistent,
   - ban unused vars,
@@ -141,6 +143,12 @@
 - Support `--verbose` and/or `--debug`.
 - Logging should be easily stubbed in tests.
 
+## Versioning
+
+- Always follow **SemVer**.
+- Version is defined in `package.json` and synced to `src/core/version.ts` via `scripts/sync-version.js` during prebuild.
+- Runtime code must import `VERSION` from `src/core/version.ts`, never read `package.json`.
+
 ## Documentation & Commenting
 
 - Use **TSDoc** on **public APIs only** (exported functions/classes/types intended for external or cross-module use).
@@ -164,3 +172,23 @@
 - Prefer deterministic tests (no network, no time dependencies) unless explicitly required.
 - Use fake timers for time-based behavior.
 - If it is required to use file I/O, mock it by the help of memfs.
+- Never write a test that depends on build artifacts.
+- When mocking, make clear if a mock is actually a mock or a spy by choosing an appropriate name.
+- An example of a proper CLI entrypoint implementation is:
+    ```ts
+    // cli.ts
+    import {businessLogic} from './businessLogic.js';
+    import {pathToFileURL} from 'node:url';
+
+    export function run(argv: string[]): number {
+      
+      const input = args.join(' ').trim();
+      console.log(businessLogic(input));
+      return 0;
+    }
+
+    if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+      process.exit(run(process.argv));
+    }
+    ```
+
